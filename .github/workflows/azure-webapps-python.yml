@@ -17,10 +17,10 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-name: Build and deploy Python app to Azure Web App
+name: Build and deploy celebrity chatbot django app to Azure Web App
 
 env:
-  AZURE_WEBAPP_NAME: your-app-name  # set this to the name of your Azure Web App
+  AZURE_WEBAPP_NAME: celebrity-ai-chatbot  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.8'              # set this to the Python version to use
 
 on:
@@ -46,11 +46,11 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
-
+          poetry init
+          poetry config virtualenvs.in-project true
+          
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: poetry install
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
