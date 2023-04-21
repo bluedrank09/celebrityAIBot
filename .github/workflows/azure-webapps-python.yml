@@ -27,6 +27,11 @@ on:
 permissions:
   contents: read
 
+env:
+  AZURE_WEBAPP_NAME: celebrity-ai-app
+  AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
+  AZURE_PASSWRD: ${{ secrets.AZURE_PASSWORD }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
