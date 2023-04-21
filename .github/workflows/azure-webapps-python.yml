@@ -19,10 +19,6 @@
 
 name: Build and deploy celebrity chatbot django app to Azure Web App
 
-env:
-  AZURE_WEBAPP_NAME: celebrity-ai-chatbot  # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.8'              # set this to the Python version to use
-
 on:
   push:
     branches: [ "main" ]
@@ -42,7 +38,6 @@ jobs:
         uses: actions/setup-python@v3.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
 
       - name: Create and start virtual environment
         run: |
