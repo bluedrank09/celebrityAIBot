@@ -39,9 +39,15 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Create and start virtual environment
+      - name: Installl poetry
         run: |
           pip install poetry
+        env: 
+          POETRY_HOME: /opt/poetry
+          PATH: ${{ env.POETRY_HOME }}/bin:${PATH}
+
+      - name: Create and start virtual environment
+        run: |
           poetry init
           poetry config virtualenvs.in-project true
           
