@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-ln-9q!_2kb$_ysq8@l72o9xqjgix7f+k2&+11&io301*1!j-57
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'celeb-ai-chatbot.azurewebsites.net',
+    '127.0.0.1'
+]
 
 
 # Application definition

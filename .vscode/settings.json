@@ -1,35 +1,4 @@
 {
-    "appService.zipIgnorePattern": [
-        "__pycache__{,/**}",
-        "*.py[cod]",
-        "*$py.class",
-        ".Python{,/**}",
-        "build{,/**}",
-        "develop-eggs{,/**}",
-        "dist{,/**}",
-        "downloads{,/**}",
-        "eggs{,/**}",
-        ".eggs{,/**}",
-        "lib{,/**}",
-        "lib64{,/**}",
-        "parts{,/**}",
-        "sdist{,/**}",
-        "var{,/**}",
-        "wheels{,/**}",
-        "share/python-wheels{,/**}",
-        "*.egg-info{,/**}",
-        ".installed.cfg",
-        "*.egg",
-        "MANIFEST",
-        ".env{,/**}",
-        ".venv{,/**}",
-        "env{,/**}",
-        "venv{,/**}",
-        "ENV{,/**}",
-        "env.bak{,/**}",
-        "venv.bak{,/**}",
-        ".vscode{,/**}"
-    ],
     "appService.defaultWebAppToDeploy": "/subscriptions/47951fe0-45fd-4472-a514-60e2652a4af4/resourceGroups/rg-celeb-ai-chatbot/providers/Microsoft.Web/sites/celeb-ai-chatbot",
-    "appService.deploySubpath": "celebrityAIBot"
+    "appService.deploySubpath": "."
 }
