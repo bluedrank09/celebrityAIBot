@@ -1,11 +1,9 @@
 # celebrityAIBot
 
 # Basic Setup
-1. poetry init
-2. poetry config virtualenvs.in-project true (creates venv)
-3. poetry install
-    - poetry add (django, )
-    - poetry remove
+1. python -m venv venv (on powershell in the folder in file explorer)
+2. pip install django
+3. pip freeze > requirements.txt (to generate requirements.txt)
 
 # Django Creation
 1. Created project (celebrityAIBot is the name of the project, . means in this directory) : django-admin startproject celebrityAIBot .
