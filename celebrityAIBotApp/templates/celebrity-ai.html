@@ -1,13 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celebrity AI Chatbot</title>
-</head>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title%}
+    Celebrity AI Chatbot
+{% endblock %}
+
+
+
 <body>
-    <h1>cool cool cool no doubt no doubt no doubt</h1>
+    {% block content %}
+
+    <div class = 'container text-center'>
+        <form method = "GET">
+            {% csrf_token %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Celebrities</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ form.first_celebrity.label }}</td>
+                        <td>{{ form.first_celebrity }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.second_celebrity.label }}</td>
+                        <td>{{ form.second_celebrity }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.third_celebrity.label }}</td>
+                        <td>{{ form.third_celebrity }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.fourth_celebrity.label }}</td>
+                        <td>{{ form.fourth_celebrity }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.fifth_celebrity.label }}</td>
+                        <td>{{ form.fifth_celebrity }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                {{ form.celeb_question}}
+            </div>
+            <br>
+            <input type = "Submit" value = "Ask">
+            <br>
+            <div>
+                {{ answer }}
+            </div>
+        </form>
+    </div>
+
+
+
     
+    {% endblock %}
 </body>
-</html>
