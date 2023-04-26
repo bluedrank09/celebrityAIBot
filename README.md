@@ -12,5 +12,8 @@ Creating app : python manage.py startapp celebrityAIBotApp
 # Testing
 1. Running the server : python manage.py runserver
 2. URL : http://127.0.0.1:8000/
-  
+3. Setup on shell to get API key value from Azure keyvault
+    - set AZURE_CLIENT_ID
+    - set AZURE_TENANT_ID
+    - set AZURE_CLIENT_SECRET
 
