@@ -17,3 +17,7 @@ Creating app : python manage.py startapp celebrityAIBotApp
     - set AZURE_TENANT_ID
     - set AZURE_CLIENT_SECRET
 
+# Links
+1. Azure : https://celeb-ai-chatbot.azurewebsites.net/celebAI
+2. Local :  http://127.0.0.1:8000/celebAI
+
