@@ -21,3 +21,19 @@ Creating app : python manage.py startapp celebrityAIBotApp
 1. Azure : https://celeb-ai-chatbot.azurewebsites.net/celebAI
 2. Local :  http://127.0.0.1:8000/celebAI
 
+# -
+1. Created a ManagedIdentity
+2. Gave the Azure Keyvault permisson to the ManagedIdentity
+
+# Keyvault
+1. Go to Microsoft Azure Portal - https://portal.azure.com/?quickstart=true#home  
+2. Click "Key vaults"
+3. Click "Create"
+4. Create the keyvault under the existing resource group, give it a name, a pricing tier. Click next
+5. Select the permisson model to be "Vault acess policy", and the resouce access to be "Azure Virtual Machines for deployment"
+6. Enable public access
+
+# Access Policies
+1. Go to Microsoft Azure Portal - https://portal.azure.com/?quickstart=true#home  
+2. Click on your keyvault
+3. On the left hand side, click on "Access Policies" 

@@ -14,7 +14,7 @@
     <div class = 'container text-center'>
         <form method = "GET">
             {% csrf_token %}
-            <table class="table">
+            <table class="table table-danger table-striped"> <!-- classes make the table have distinguished rows and in the colour red -->
                 <thead>
                     <tr>
                         <th>Celebrities</th>
@@ -44,20 +44,29 @@
                     </tr>
                 </tbody>
             </table>
+            <br> <!-- end of table -->
+            <div class="fw-semibold">
+                <p>Enter your question here : </p>
+            </div>
             <div>
                 {{ form.celeb_question}}
             </div>
             <br>
             <input type = "Submit" value = "Ask">
-            <br>
+            <br> 
+            <br>  
+            <div class="fw-semibold">
+                <p>Answer will appear below here </p>
+            </div>
             <div>
                 {{ answer }}
             </div>
+            <br>
         </form>
     </div>
 
 
-
+    
     
     {% endblock %}
 </body>
