@@ -100,7 +100,7 @@ def get_response(question_string): # function that goes and gets the answer to t
         
         response = index.query(final_question, text_qa_template = question_answer_prompt)
 
-        print(f"Finished querying {now:%c}")
+        #print(f"Finished querying {now:%c}")
 
         return(response)
     
