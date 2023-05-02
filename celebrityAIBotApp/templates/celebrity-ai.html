@@ -45,22 +45,24 @@
                 </tbody>
             </table>
             <br> <!-- end of table -->
-            <div class="fw-semibold">
-                <p>Enter your question here : </p>
+            <div class="fw-semibold text-center text-danger">
+                <p>Enter your question here </p>
             </div>
-            <div>
+            <div class="border border-danger-subtle">
                 {{ form.celeb_question}}
             </div>
             <br>
-            <input type = "Submit" value = "Ask">
+            <input class="btn btn-danger" type="submit" value="Ask">
             <br> 
             <br>  
             <div class="fw-semibold">
                 <p>Answer will appear below here </p>
             </div>
-            <div>
+            <div class = "border border-danger-subtle">
                 {{ answer }}
             </div>
+            <br>
+            <br>
             <br>
         </form>
     </div>
