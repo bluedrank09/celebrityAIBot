@@ -18,7 +18,11 @@ def celebrity_ai_view(request):
 
         print(f"celebrity_ai_view has been invoked") # for debugging lol coding hates me 
 
+        question_asked = None
+
         if request.method == 'GET' : # when the checkbox is clicked, the program knows this as the request method was "GET" - it is getting information
+            print(f"---{request.GET.get('Ask')}---!")
+
             firstCelebrityTicked = request.GET.get('first_celebrity')
             print(f"{firstCelebrityTicked}")
 
@@ -52,7 +56,17 @@ def celebrity_ai_view(request):
                 listTickedCelebrities.append("Elizabeth Olsen")
 
             if fifthCelebrityTicked:
-                listTickedCelebrities.append("Chris Hemsworth")   
+                listTickedCelebrities.append("Chris Hemsworth") 
+
+            if request.GET.get('Who are they?') == "Who are they?":
+                question_asked = "Who are they"  
+
+            elif request.GET.get('Are they well liked?') == "Are they well liked?":
+                question_asked = "Are they well liked"
+
+            elif request.GET.get('How many movies are they in?') == "How many movies are they in?":
+                question_asked = "How many movies are they in"
+
 
             listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
 
@@ -68,7 +82,7 @@ def celebrity_ai_view(request):
                 context['answer'] = get_response(question_string)
             
             return render(request, 'celebrity-ai.html', context)
-        
+            
     except Exception as error: # rasing an error and sending it to the console if there is one
         raise error
 

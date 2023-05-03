@@ -49,21 +49,32 @@
             <br> <!-- end of table -->
             <div class="fw-semibold text-center text-danger">
                 <!-- label to tell uses to input question in the box below -->
-                <p>Enter your question here </p>
+                <p>Enter Your Question Here </p>
             </div>
+            <div class = 'fw-semibold'>
+                <p>Some Examples :</p>
+            </div>
+            <div class="container">
+                <input class="btn btn-outline-danger" type="submit" value="Who are they?" name="Who are they?">
+                <input class="btn btn-outline-danger" type="submit" value="Are they well liked?" name="Are they well liked?">
+                <input class="btn btn-outline-danger" type="submit" value="How many movies are they in?" name="How many movies are they in?" >
+                
+
+            </div>
+            <br>
             <div class="border border-danger-subtle">
                 <!-- where users actually input their question -->
                 {{ form.celeb_question}}
             </div>
             <br>
             <!-- creating ask button -->
-            <input class="btn btn-danger" type="submit" value="Ask">
+            <input class="btn btn-danger" type="submit" value="Ask" name="Ask">
             <br> 
             <br>  
             <div class="fw-semibold">
-                <p>Answer will appear below here </p>
+                <p>Answer Will Appear Below Here </p>
             </div>
-            <div class = "border border-danger-subtle"> <!-- space for the anser to appear -->
+            <div class = "border border-danger-subtle"> <!-- space for the answer to appear -->
                 {{ answer }}
             </div>
             <br>
