@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} <!-- extending base html file so that I don't have to retpye it everytime -->
 
 {% load static %}
 
-{% block title%}
+{% block title%} <!-- title of the page -->
     Celebrity AI Chatbot
 {% endblock %}
 
@@ -13,16 +13,18 @@
 
     <div class = 'container text-center'>
         <form method = "GET">
-            {% csrf_token %}
+            {% csrf_token %} <!-- part of the url that shows in the middle...the csrf token -->
+            <!-- creating a table to put the checkboxes in -->
             <table class="table table-danger table-striped"> <!-- classes make the table have distinguished rows and in the colour red -->
                 <thead>
                     <tr>
+                        <!-- creating the two table headers -->
                         <th>Celebrities</th>
                         <th>Select</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr> <!-- all the <tr>s are different checkboxes. it will go to the forms file and get the input field as a checkbox to display -->
                         <td>{{ form.first_celebrity.label }}</td>
                         <td>{{ form.first_celebrity }}</td>
                     </tr>
@@ -46,20 +48,29 @@
             </table>
             <br> <!-- end of table -->
             <div class="fw-semibold text-center text-danger">
+                <!-- label to tell uses to input question in the box below -->
                 <p>Enter your question here </p>
             </div>
             <div class="border border-danger-subtle">
+                <!-- where users actually input their question -->
                 {{ form.celeb_question}}
             </div>
             <br>
+            <!-- creating ask button -->
             <input class="btn btn-danger" type="submit" value="Ask">
             <br> 
             <br>  
             <div class="fw-semibold">
                 <p>Answer will appear below here </p>
             </div>
-            <div class = "border border-danger-subtle">
+            <div class = "border border-danger-subtle"> <!-- space for the anser to appear -->
                 {{ answer }}
+            </div>
+            <br>
+            <br>
+            <!-- giving a quick disclaimer that benedict cumberbatch height comparisons don't work -->
+            <div class="text-center text-wrap fst-italic">
+                <p>Quick note : If you are asking whether Benedict Cumberbatch is shorter or taller than someone else, chances are it will not work. It will say Benedict is the shortest or the tallest no matter who you select. This is an error in ChatGPT. Benedict is apparently alpha and cannot be beaten...lol. </p>
             </div>
             <br>
             <br>
@@ -70,5 +81,5 @@
 
     
     
-    {% endblock %}
+    {% endblock %} <!-- ending of the base html file code -->
 </body>

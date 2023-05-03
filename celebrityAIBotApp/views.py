@@ -9,15 +9,16 @@ import datetime
 
 def celebrity_ai_view(request):
     try:
-        listTickedCelebrities = [] # list that will contain the elements of the users question - who are they asking about and what the question was. will later get converted into a string
+        listTickedCelebrities = [] # list that will contain the elements of the users question - who are they asking about and what the question was. 
+                                #will later get converted into a string
         question_string = "" # initialising the string
         context = {}
-        form = CelebrityQuestion(request.GET or None)
+        form = CelebrityQuestion(request.GET or None) # 
         context['form'] = form
 
         print(f"celebrity_ai_view has been invoked") # for debugging lol coding hates me 
 
-        if request.method == 'GET' : 
+        if request.method == 'GET' : # when the checkbox is clicked, the program knows this as the request method was "GET" - it is getting information
             firstCelebrityTicked = request.GET.get('first_celebrity')
             print(f"{firstCelebrityTicked}")
 
@@ -38,7 +39,7 @@ def celebrity_ai_view(request):
 
             # all of these if conditions will add the actors name to the list of components for the query string if they have ben checked
             # if they have been, only their names will be given as part of the query string
-            if firstCelebrityTicked:
+            if firstCelebrityTicked: # checking if 
                 listTickedCelebrities.append("Benedict Cumberbatch")
 
             if secondCelebrityTicked:
@@ -53,7 +54,7 @@ def celebrity_ai_view(request):
             if fifthCelebrityTicked:
                 listTickedCelebrities.append("Chris Hemsworth")   
 
-            listTickedCelebrities.append(question_asked)
+            listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
 
             # making all of the items in that list into a string that can be used as the full query the user has given
             for item in listTickedCelebrities:
@@ -78,7 +79,7 @@ def get_response(question_string): # function that goes and gets the answer to t
     try:
         prompt_template = "" # initialising prompt
 
-        get_api_key() # getting api key from azure - the functoin itself is right below this one
+        get_api_key() # getting api key from azure keyvault- the functoin itself is right below this one
         
         print(f"get_response has been invoked") # more debigging lol
 
@@ -96,15 +97,17 @@ def get_response(question_string): # function that goes and gets the answer to t
         question_answer_prompt = QuestionAnswerPrompt(prompt_template) # making the 
         final_question = f"{question_string}"
 
-        print(f"About to use openAI")
+        print(f"About to use openAI") # debugging...lol
         
-        response = index.query(final_question, text_qa_template = question_answer_prompt)
+        response = index.query(final_question, text_qa_template = question_answer_prompt) # gets the response 
 
-        #print(f"Finished querying {now:%c}")
+        now = datetime.datetime.now() # for logging - this wll give the exact date with m=day, month, year, hours, minutes, seconds
+
+        print(f"Finished querying {now:%c}")
 
         return(response)
     
-    except Exception as error:
+    except Exception as error: # raising error if there is one
         raise error
     
     finally:
