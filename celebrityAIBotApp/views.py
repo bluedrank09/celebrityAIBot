@@ -1,7 +1,7 @@
 # importing all the needed libraries
 from django.shortcuts import render
 from celebrityAIBotApp.forms import CelebrityQuestion
-from llama_index import GPTSimpleVectorIndex, QuestionAnswerPrompt
+from llama_index import GPTSimpleVectorIndex, QuestionAnswerPrompt, StringIterableReader, GPTTreeIndex
 import os
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
@@ -67,7 +67,6 @@ def celebrity_ai_view(request):
             elif request.GET.get('How many movies are they in?') == "How many movies are they in?":
                 question_asked = "How many movies are they in"
 
-
             listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
 
             # making all of the items in that list into a string that can be used as the full query the user has given
@@ -111,7 +110,18 @@ def get_response(question_string): # function that goes and gets the answer to t
         question_answer_prompt = QuestionAnswerPrompt(prompt_template) # making the 
         final_question = f"{question_string}"
 
+        question_list = []
+        question_list.append(final_question) # making the final question a list so that we can iterate through it to see if it's a comparison
+
         print(f"About to use openAI") # debugging...lol
+
+        question_document = StringIterableReader().load_data(texts=question_list)
+        index = GPTTreeIndex.from_documents(question_document)
+
+        response = index.query("Is this text comparing two or more things? Give a True or False answer")
+
+        if response == "True":
+            pass
         
         response = index.query(final_question, text_qa_template = question_answer_prompt) # gets the response 
 
@@ -135,12 +145,12 @@ def get_api_key(): # getting th api key from my azure key vault
         credential = DefaultAzureCredential()
         client = SecretClient(vault_url=kv_uri, credential=credential)
 
-        print(f"get_api_key has been invoked")
+        print(f"get_api_key has been invoked") # even more debugging
 
-        openai_api_key = client.get_secret(secret_name).value
+        openai_api_key = client.get_secret(secret_name).value # getting the api key in the secrets section of the azure key vault
         os.environ["OPENAI_API_KEY"] = openai_api_key # setting api key in the environment as an environemnt variable
     
-    except Exception as error:
+    except Exception as error: # raising an error
         raise error
     
     finally:
