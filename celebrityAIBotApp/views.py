@@ -7,6 +7,10 @@ from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 import datetime
 
+# final_question = ""
+now = datetime.datetime.now() # for logging - this wll give the exact date with m=day, month, year, hours, minutes, seconds
+
+
 def celebrity_ai_view(request):
     try:
         listTickedCelebrities = [] # list that will contain the elements of the users question - who are they asking about and what the question was. 
@@ -72,16 +76,27 @@ def celebrity_ai_view(request):
             # making all of the items in that list into a string that can be used as the full query the user has given
             for item in listTickedCelebrities:
                 question_string += (f"{item} ")
-
-            print(f"{question_asked}") # also for debugging lol
-
-            print(f"question_string contains {question_asked}")
-
-            if question_asked is not None: # making sure the user has actually asked a question
-                context['answer'] = get_response(question_string)
             
-            return render(request, 'celebrity-ai.html', context)
-            
+            if request.GET.get("Ask") == "Ask": #check for comparison if the user clicked the ask button
+                print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
+                print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
+                comparison = checkForComparison(question_asked) # calling the comparison function
+
+                if comparison and len(listTickedCelebrities) < 3: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
+                    print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
+                    print(f"-----SHOULD STOP THE PROGRAM-----")
+                    context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
+                else: # will execute if nothing was a issue
+                    print(f"---RUNNING ELSE PART NOW---") 
+                    print(f"{question_asked}") # also for debugging lol
+
+                    print(f"question_string contains {question_asked}")
+
+                    if question_asked is not None: # making sure the user has actually asked a question
+                        context['answer'] = get_response(question_string)
+                    
+        return render(request, 'celebrity-ai.html', context)
+                
     except Exception as error: # rasing an error and sending it to the console if there is one
         raise error
 
@@ -106,26 +121,12 @@ def get_response(question_string): # function that goes and gets the answer to t
         "Based on this context, could you please help me understand the answer to this question: {query_str}?\n"
         )
 
-
         question_answer_prompt = QuestionAnswerPrompt(prompt_template) # making the 
         final_question = f"{question_string}"
 
-        question_list = []
-        question_list.append(final_question) # making the final question a list so that we can iterate through it to see if it's a comparison
-
         print(f"About to use openAI") # debugging...lol
 
-        question_document = StringIterableReader().load_data(texts=question_list)
-        index = GPTTreeIndex.from_documents(question_document)
-
-        response = index.query("Is this text comparing two or more things? Give a True or False answer")
-
-        if response == "True":
-            pass
-        
         response = index.query(final_question, text_qa_template = question_answer_prompt) # gets the response 
-
-        now = datetime.datetime.now() # for logging - this wll give the exact date with m=day, month, year, hours, minutes, seconds
 
         print(f"Finished querying {now:%c}")
 
@@ -155,4 +156,29 @@ def get_api_key(): # getting th api key from my azure key vault
     
     finally:
         print(f":D")
+
+def checkForComparison(question_asked): # checking for if the user put in a comparison question
+    print(f"checkForComparison invoked")
+
+    question_list = [] # creating a list for StringIterableReader to iterate through 
+    question_list.append(question_asked) # appending the string with the celebrities and the question to the list
+
+    print(f"-------calling api-------")
+    apiKey = get_api_key() # getting the api key from the get_api_key function
+    print(f"-------called API got API-------")
+
+    documents = StringIterableReader().load_data(texts=question_list) # ierates through the lis
+    print(f"-------done iteration-------")
+    index = GPTTreeIndex.from_documents(documents) # creates an index file on the memory 
+    print(f"-------indexing done-------")
+
+    # getting openai to gcheck if its a comparison or not
+    response = index.query("Is this question comparing two or more people ? return 1 if it compare two or more people and 0 if it is not comparing 2 or more people") 
+    print(f"-------QUERIED-------") # debugging
+
+    print(f"!!!!!!!-------THE RESPONSE IS [{response}]-------!!!!!!!") # you'll never guess what this is
+
+    return(response) # passing back the 0 ir 1 depending on if it was True or False
+
+
 
