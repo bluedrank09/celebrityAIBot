@@ -92,9 +92,9 @@ def celebrity_ai_view(request):
 
                     print(f"question_string contains {question_asked}")
 
-                    if question_asked is not None: # making sure the user has actually asked a question
-                        context['answer'] = get_response(question_string)
-                    
+                if question_asked is not None: # making sure the user has actually asked a question
+                    context['answer'] = get_response(question_string)
+                        
         return render(request, 'celebrity-ai.html', context)
                 
     except Exception as error: # rasing an error and sending it to the console if there is one
