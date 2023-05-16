@@ -62,39 +62,40 @@ def celebrity_ai_view(request):
             if fifthCelebrityTicked:
                 listTickedCelebrities.append("Chris Hemsworth") 
 
-            if request.GET.get('Who are they?') == "Who are they?":
-                question_asked = "Who are they"  
+            if len(listTickedCelebrities) == 0:
+                context['answer'] = "Please select a celebrity to ask about"
+            else:
+                # making all of the items in that list into a string that can be used as the full query the user has given
+                for item in listTickedCelebrities:
+                    question_string += (f"{item} ")
 
-            elif request.GET.get('Are they well liked?') == "Are they well liked?":
-                question_asked = "Are they well liked"
+                if request.GET.get('Who are they?') == "Who are they?":
+                    question_asked = "Who are they"  
 
-            elif request.GET.get('How many movies are they in?') == "How many movies are they in?":
-                question_asked = "How many movies are they in"
+                elif request.GET.get('Are they well liked?') == "Are they well liked?":
+                    question_asked = "Are they well liked"
 
-            listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
+                elif request.GET.get('How many movies are they in?') == "How many movies are they in?":
+                    question_asked = "How many movies are they in"
 
-            # making all of the items in that list into a string that can be used as the full query the user has given
-            for item in listTickedCelebrities:
-                question_string += (f"{item} ")
-            
-            if request.GET.get("Ask") == "Ask": #check for comparison if the user clicked the ask button
-                print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
-                print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
-                comparison = checkForComparison(question_asked) # calling the comparison function
+                elif request.GET.get("Ask") == "Ask": #check for comparison if the user clicked the ask button
+                    print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
+                    print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
+                    comparison = checkForComparison(question_asked) # calling the comparison function
 
-                if comparison and len(listTickedCelebrities) < 3: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
-                    print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
-                    print(f"-----SHOULD STOP THE PROGRAM-----")
-                    context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
-                else: # will execute if nothing was a issue
-                    print(f"---RUNNING ELSE PART NOW---") 
-                    print(f"{question_asked}") # also for debugging lol
+                    if comparison and len(listTickedCelebrities) < 2: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
+                        print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
+                        print(f"-----SHOULD STOP THE PROGRAM-----")
+                        question_asked = None
+                        context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
 
-                    print(f"question_string contains {question_asked}")
+                #listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
+                question_string = f"{question_asked} {question_string}"
+                print(f"FINAL QUESTION = {question_string}")
 
                 if question_asked is not None: # making sure the user has actually asked a question
                     context['answer'] = get_response(question_string)
-                        
+                                
         return render(request, 'celebrity-ai.html', context)
                 
     except Exception as error: # rasing an error and sending it to the console if there is one
@@ -182,3 +183,7 @@ def checkForComparison(question_asked): # checking for if the user put in a comp
 
 
 
+#print(f"---RUNNING ELSE PART NOW---") 
+                        #print(f"{question_asked}") # also for debugging lol
+
+                       # print(f"question_string contains {question_asked}")
