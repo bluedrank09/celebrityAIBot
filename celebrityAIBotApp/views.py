@@ -79,28 +79,34 @@ def celebrity_ai_view(request):
                     question_asked = "How many movies are they in"
 
                 elif request.GET.get("Ask") == "Ask": #check for comparison if the user clicked the ask button
-                    proper_question = check_for_real_question(question_asked)
-                    if proper_question == "False":
-                        question_asked = None
-                        context['answer'] = "Please input a valid question"
+                    if len(question_asked) == 1:
+                        print(f"Text box was empty - it contained '{question_asked}', length is {len(question_asked)}")
+                        context['answer'] = "Please enter a question"
 
-                    if question_asked is not None:
-                        print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
-                        print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
-                        comparison = checkForComparison(question_asked) # calling the comparison function
-
-                        if comparison == "True" and len(listTickedCelebrities) < 2: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
-                            print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
-                            print(f"-----SHOULD STOP THE PROGRAM-----")
+                    else:
+                        print(f"Question asked contains [{question_asked}], length is {len(question_asked)}")
+                        proper_question = check_for_real_question(question_asked)
+                        if proper_question == "False":
                             question_asked = None
-                            context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
+                            context['answer'] = "Please input a valid question"
 
-                #listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
-                question_string = f"{question_asked} {question_string}"
-                print(f"FINAL QUESTION = {question_string}")
+                        if question_asked is not None:
+                            print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
+                            print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
+                            comparison = checkForComparison(question_asked) # calling the comparison function
 
-                if question_asked is not None: # making sure the user has actually asked a question
-                    context['answer'] = get_response(question_string)
+                            if comparison == "True" and len(listTickedCelebrities) < 2: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
+                                print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
+                                print(f"-----SHOULD STOP THE PROGRAM-----")
+                                question_asked = None
+                                context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
+
+                        #listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
+                        question_string = f"{question_asked} {question_string}"
+                        print(f"FINAL QUESTION = {question_string}")
+
+                        if question_asked is not None: # making sure the user has actually asked a question
+                            context['answer'] = get_response(question_string)
                                     
         return render(request, 'celebrity-ai.html', context)
                 
