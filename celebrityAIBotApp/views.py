@@ -79,10 +79,10 @@ def celebrity_ai_view(request):
                     question_asked = "How many movies are they in"
 
                 elif request.GET.get("Ask") == "Ask": #check for comparison if the user clicked the ask button
-                    if len(question_asked) == 1:
-                        print(f"Text box was empty - it contained '{question_asked}', length is {len(question_asked)}")
+                    if len(question_asked.strip()) == 0:
+                        question_asked = None
+                        print(f"Text box was empty - it contained '{question_asked}'")
                         context['answer'] = "Please enter a question"
-
                     else:
                         print(f"Question asked contains [{question_asked}], length is {len(question_asked)}")
                         proper_question = check_for_real_question(question_asked)
@@ -101,13 +101,13 @@ def celebrity_ai_view(request):
                                 question_asked = None
                                 context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
 
-                        #listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
-                        question_string = f"{question_asked} {question_string}"
-                        print(f"FINAL QUESTION = {question_string}")
+                #listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
+                question_string = f"{question_asked} {question_string}"
+                print(f"FINAL QUESTION = {question_string}")
 
-                        if question_asked is not None: # making sure the user has actually asked a question
-                            context['answer'] = get_response(question_string)
-                                    
+                if question_asked is not None: # making sure the user has actually asked a question
+                    context['answer'] = get_response(question_string)
+                                        
         return render(request, 'celebrity-ai.html', context)
                 
     except Exception as error: # rasing an error and sending it to the console if there is one
