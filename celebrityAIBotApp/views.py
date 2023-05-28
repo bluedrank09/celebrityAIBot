@@ -79,15 +79,21 @@ def celebrity_ai_view(request):
                     question_asked = "How many movies are they in"
 
                 elif request.GET.get("Ask") == "Ask": #check for comparison if the user clicked the ask button
-                    print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
-                    print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
-                    comparison = checkForComparison(question_asked) # calling the comparison function
-
-                    if comparison and len(listTickedCelebrities) < 2: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
-                        print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
-                        print(f"-----SHOULD STOP THE PROGRAM-----")
+                    proper_question = check_for_real_question(question_asked)
+                    if proper_question == "False":
                         question_asked = None
-                        context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
+                        context['answer'] = "Please input a valid question"
+
+                    if question_asked is not None:
+                        print(f"-------CHECKFORCOMPARISONHERE-------") # debugging
+                        print(f"!!!--- len of ticked celebrities = {len(listTickedCelebrities)} ---!!!") 
+                        comparison = checkForComparison(question_asked) # calling the comparison function
+
+                        if comparison == "True" and len(listTickedCelebrities) < 2: # using truthiness to check if it WAS a comparion but they only inputted one celebrity
+                            print(f"-----ERROR THEY HAVE INPUTTED NOT ENOUGH AT {now:%c}-----")
+                            print(f"-----SHOULD STOP THE PROGRAM-----")
+                            question_asked = None
+                            context['answer'] = "Sorry, for a comparison, please input two or more celebrities" # sending this as the answer in the answer box
 
                 #listTickedCelebrities.append(question_asked) # getting the input form the question box and adding it to the query string
                 question_string = f"{question_asked} {question_string}"
@@ -95,7 +101,7 @@ def celebrity_ai_view(request):
 
                 if question_asked is not None: # making sure the user has actually asked a question
                     context['answer'] = get_response(question_string)
-                                
+                                    
         return render(request, 'celebrity-ai.html', context)
                 
     except Exception as error: # rasing an error and sending it to the console if there is one
@@ -174,16 +180,55 @@ def checkForComparison(question_asked): # checking for if the user put in a comp
     print(f"-------indexing done-------")
 
     # getting openai to gcheck if its a comparison or not
-    response = index.query("Is this question comparing two or more people ? return 1 if it compare two or more people and 0 if it is not comparing 2 or more people") 
+    response = index.query("Is this question comparing two or more people ? return True if it is comparing two or more people and False if it is not comparing 2 or more people") 
     print(f"-------QUERIED-------") # debugging
 
     print(f"!!!!!!!-------THE RESPONSE IS [{response}]-------!!!!!!!") # you'll never guess what this is
 
-    return(response) # passing back the 0 ir 1 depending on if it was True or False
+    comparison_true = index.query("return the word True as an answer to this query")
+    comparison_false = index.query("return the word False as an answer to this query")
+
+    if response == comparison_true:
+        print(f"Final answer is TRUE")
+        comparisonAnswer = "True"
+    else:
+        print(f"Final response is FALSE")
+        comparisonAnswer = "False"
+
+    return(comparisonAnswer) # passing back the 0 ir 1 depending on if it was True or False
 
 
+def check_for_real_question(question_asked): # checking for if the user put in a comparison question
+    print(f"check_for_real_question invoked")
 
-#print(f"---RUNNING ELSE PART NOW---") 
-                        #print(f"{question_asked}") # also for debugging lol
+    question_list = [] # creating a list for StringIterableReader to iterate through 
+    question_list.append(question_asked) # appending the string with the celebrities and the question to the list
 
-                       # print(f"question_string contains {question_asked}")
+    print(f"-------calling api-------")
+    apiKey = get_api_key() # getting the api key from the get_api_key function
+    print(f"-------called API got API-------")
+
+    documents = StringIterableReader().load_data(texts=question_list) # ierates through the lis
+    print(f"-------done iteration-------")
+    index = GPTTreeIndex.from_documents(documents) # creates an index file on the memory 
+    print(f"-------indexing done-------")
+
+    # getting openai to gcheck if its a comparison or not
+    response = index.query("Is this question a proper question ? return True if it is a proper question and False if it is not a proper question") 
+    print(f"-------QUERIED-------") # debugging
+
+    print(f"!!!!!!!-------THE RESPONSE IS [{response}]-------!!!!!!!") # you'll never guess what this is
+
+    proper_question_true = index.query("return the word True as an answer to this query")
+    print(f"response is {response} and proper_question_true is {proper_question_true}")
+
+    if response == proper_question_true:
+        print(f"Final answer is TRUE")
+        properQuestionAnswer = "True"
+    else:
+        print(f"Final response is FALSE")
+        properQuestionAnswer = "False"
+
+    print(f"THE QUESTION ANSWER IS {properQuestionAnswer}")
+
+    return(properQuestionAnswer) # passing back the 0 ir 1 depending on if it was True or False
